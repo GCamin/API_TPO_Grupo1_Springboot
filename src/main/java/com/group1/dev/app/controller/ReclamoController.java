@@ -1,8 +1,7 @@
 package com.group1.dev.app.controller;
 
 
-
-import java.util.List;
+import java.util.ArrayList;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
-
-import com.group1.dev.app.model.entity.ReclamoDTO;
+import com.group1.dev.app.model.entity.Reclamo;
 import com.group1.dev.app.services.ReclamoService;
 import com.group1.dev.app.exceptions.ReclamoNotFoundException;
 
@@ -40,45 +38,45 @@ public class ReclamoController {
 	@GetMapping("/all")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<ReclamoDTO>> getAll() {
-	    List<ReclamoDTO> allReclamosDTO = reclamoService.findAll();
-	    if (allReclamosDTO.isEmpty()) {
+	public ResponseEntity<ArrayList<Reclamo>> getAll() {
+	    ArrayList<Reclamo> allReclamos = reclamoService.findAll();
+	    if (allReclamos.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	    } else {
-	        return ResponseEntity.ok(allReclamosDTO);
+	        return ResponseEntity.ok(allReclamos);
 	    }
 	}
 	
 	
 	@GetMapping("/filter")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<ReclamoDTO>> filterReclamos(@RequestParam(name = "userid", required = false) Integer userId, @RequestParam(name = "buildingid", required = false) Integer buildingId, @RequestParam(name = "state", required = false) String state, @RequestParam(name = "type", required = false) String type ) {
-	    List<ReclamoDTO> reclamosDTO = reclamoService.filter(userId,buildingId,state,type);
-	   if (reclamosDTO.isEmpty()) {
+	public ResponseEntity<ArrayList<Reclamo>> filterReclamos(@RequestParam(name = "userid", required = false) Integer userId, @RequestParam(name = "buildingid", required = false) Integer buildingId, @RequestParam(name = "state", required = false) String state, @RequestParam(name = "type", required = false) String type ) {
+	    ArrayList<Reclamo> reclamos = reclamoService.filter(userId,buildingId,state,type);
+	   if (reclamos.isEmpty()) {
 		   return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	   }
 	   else {
-	    return ResponseEntity.ok(reclamosDTO);}
+	    return ResponseEntity.ok(reclamos);}
 	}
 	
 	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<ReclamoDTO> findById(@PathVariable Integer id) {
-		ReclamoDTO reclamoDTO = reclamoService.findById(id);
-		if (reclamoDTO != null) {
-			return ResponseEntity.ok(reclamoDTO);
+	public ResponseEntity<Reclamo> findById(@PathVariable Integer id) {
+		Reclamo reclamo = reclamoService.findById(id);
+		if (reclamo != null) {
+			return ResponseEntity.ok(reclamo);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 	}
 	
 	@PostMapping("/add")
-    public ResponseEntity<String> addReclamo(@RequestBody ReclamoDTO reclamoDTO) {
+    public ResponseEntity<String> addReclamo(@RequestBody Reclamo reclamo) {
         
 		try {
-		reclamoService.save(reclamoDTO);
+		reclamoService.save(reclamo);
         
 		 return ResponseEntity.ok().body("Reclamo creado exitosamente");}
 		
@@ -91,11 +89,11 @@ public class ReclamoController {
     }
 	
 	@PatchMapping("/patch/{id}")
-	public ResponseEntity<?> actualizarReclamo(@PathVariable Integer id, @RequestBody ReclamoDTO reclamoDTO) {
+	public ResponseEntity<?> actualizarReclamo(@PathVariable Integer id, @RequestBody Reclamo reclamo) {
 
 		
 		try {
-			reclamoService.update(id,reclamoDTO);
+			reclamoService.update(id,reclamo);
 			return ResponseEntity.ok("Reclamo actualizado exitosamente");
 			
 		}

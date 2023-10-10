@@ -1,12 +1,17 @@
 package com.group1.dev.app.model.entity;
 
+import java.util.Optional;
 
+
+
+import com.group1.dev.app.services.EdificioService;
+import com.group1.dev.app.services.PersonaService;
 
 
 
 public class ReclamoDTO {
 	
-	private Integer id_reclamo;
+	private int id_reclamo;
 	private String titulo;
 	private int id_persona = 0;
 	private String descripcion;
@@ -97,6 +102,105 @@ public class ReclamoDTO {
 
 	public void setId_edificio(int id_edificio) {
 		this.id_edificio = id_edificio;
+	}
+	
+	public Reclamo DTOtoReclamo() {
+		
+		Reclamo reclamo = new Reclamo();
+		
+		if (this.actualizacion != null) { 
+		reclamo.setActualizacion(this.actualizacion);
+		}
+		
+		if(this.descripcion != null) {
+		reclamo.setDescripcion(this.descripcion);}
+		
+		
+		if(this.id_edificio !=0) {
+		Optional<Edificio> optionalEdificio = Optional.of(new Edificio());
+		EdificioService edificioService = new EdificioService();
+		optionalEdificio = edificioService.findById(this.id_edificio);
+		Edificio edificio = new Edificio();
+    	if (optionalEdificio.isPresent()) {
+    	    
+    	    edificio = optionalEdificio.get();
+    	}
+    	
+		
+		reclamo.setEdificio(edificio);}
+		
+		if (this.id_persona != 0) {
+		Optional<Persona> optionalPersona = Optional.of(new Persona());
+		PersonaService personaService = new PersonaService();
+		optionalPersona = personaService.findById(this.id_persona);
+		Persona persona = new Persona();
+    	if (optionalPersona.isPresent()) {
+    	    
+    	    persona = optionalPersona.get();
+    	}
+		
+		reclamo.setPersona(persona);
+		}
+		
+		if (this.estadoReclamo != null) {
+		
+		EstadoReclamo estado = EstadoReclamo.valueOf(this.estadoReclamo);
+		reclamo.setEstadoReclamo(estado);
+		}
+		
+		if (this.tipoReclamo != null) {
+		TipoReclamo tipo = TipoReclamo.valueOf(this.tipoReclamo);
+		reclamo.setTipoReclamo(tipo);}
+		
+		if (this.titulo != null) {
+		reclamo.setTitulo(this.titulo);
+		}
+		
+		
+		
+		
+		return reclamo;
+		
+	}
+	
+	public ReclamoDTO reclamoToDto(Reclamo reclamo) {
+		
+		
+		ReclamoDTO reclamoDTO = new ReclamoDTO();
+		
+		if (reclamo.getActualizacion() != null) { 
+		reclamoDTO.setActualizacion(reclamo.getActualizacion());
+		}
+		
+		if(reclamo.getDescripcion() != null) {
+		reclamoDTO.setDescripcion(reclamo.getDescripcion());}
+		
+		Edificio edificio = new Edificio();
+		edificio = reclamo.getEdificio();
+		if(edificio.getId() !=0) {
+			reclamoDTO.setId_edificio(edificio.getId());
+		}
+		
+		Persona persona = new Persona();
+		persona = reclamo.getPersona();
+		if(persona.getId() !=0) {
+			reclamoDTO.setId_persona(persona.getId());
+		}
+		
+		if (reclamo.getEstadoReclamo() != null) {
+		
+		String estado = reclamo.getEstadoReclamo().toString();
+		reclamoDTO.setEstadoReclamo(estado);
+		}
+		
+		if (reclamo.getTipoReclamo() != null) {
+		String tipo = reclamo.getTipoReclamo().toString();
+		reclamoDTO.setTipoReclamo(tipo);}
+		
+		if (reclamo.getTitulo() != null) {
+		reclamoDTO.setTitulo(reclamo.getTitulo());
+		}		
+		return reclamoDTO;
 	}
 	
 }

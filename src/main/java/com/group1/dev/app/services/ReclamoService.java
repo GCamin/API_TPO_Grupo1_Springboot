@@ -1,6 +1,5 @@
 package com.group1.dev.app.services;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -9,11 +8,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.group1.dev.app.model.dao.ReclamoRepository;
-import com.group1.dev.app.model.entity.Edificio;
 import com.group1.dev.app.model.entity.EstadoReclamo;
-import com.group1.dev.app.model.entity.Persona;
 import com.group1.dev.app.model.entity.Reclamo;
-import com.group1.dev.app.model.entity.ReclamoDTO;
 import com.group1.dev.app.model.entity.TipoReclamo;
 
 @Service
@@ -27,127 +23,15 @@ public class ReclamoService implements IReclamoService {
 
 	@Autowired
 	private ReclamoRepository reclamoRepo;
-	
-	
-public ReclamoDTO reclamoToDto(Reclamo reclamo) {
-		
-		
-		ReclamoDTO reclamoDTO = new ReclamoDTO();
-		
-		if (reclamo.getActualizacion() != null) { 
-		reclamoDTO.setActualizacion(reclamo.getActualizacion());
-		}
-		
-		if(reclamo.getDescripcion() != null) {
-		reclamoDTO.setDescripcion(reclamo.getDescripcion());}
-		
-	
-		if(reclamo.getEdificio().getId() !=0) {
-			reclamoDTO.setId_edificio(reclamo.getEdificio().getId());
-		}
-		
-		
-		if(reclamo.getPersona().getId() !=0) {
-			reclamoDTO.setId_persona(reclamo.getPersona().getId());
-		}
-		
-		if (reclamo.getEstadoReclamo() != null) {
-		
-		String estado = reclamo.getEstadoReclamo().toString();
-		reclamoDTO.setEstadoReclamo(estado);
-		}
-		
-		if (reclamo.getTipoReclamo() != null) {
-		String tipo = reclamo.getTipoReclamo().toString();
-		reclamoDTO.setTipoReclamo(tipo);}
-		
-		if (reclamo.getTitulo() != null) {
-		reclamoDTO.setTitulo(reclamo.getTitulo());
-		}		
-		return reclamoDTO;
-	}
-		
-
-	
-public Reclamo DTOtoReclamo(ReclamoDTO reclamoDTO) {
-		
-		Reclamo reclamo = new Reclamo();
-		
-		if (reclamoDTO.getActualizacion() != null) { 
-		reclamo.setActualizacion(reclamoDTO.getActualizacion());
-		}
-		
-		if(reclamoDTO.getDescripcion() != null) {
-		reclamo.setDescripcion(reclamoDTO.getDescripcion());}
-		
-		
-		if(reclamoDTO.getId_edificio() !=0) {
-		Optional<Edificio> optionalEdificio = Optional.of(new Edificio());
-		EdificioService edificioService = new EdificioService();
-		optionalEdificio = edificioService.findById(reclamoDTO.getId_edificio());
-		Edificio edificio = new Edificio();
-    	if (optionalEdificio.isPresent()) {
-    	    
-    	    edificio = optionalEdificio.get();
-    	}
-    	
-		
-		reclamo.setEdificio(edificio);}
-		
-		if (reclamoDTO.getId_persona() != 0) {
-		Optional<Persona> optionalPersona = Optional.of(new Persona());
-		PersonaService personaService = new PersonaService();
-		optionalPersona = personaService.findById(reclamoDTO.getId_persona());
-		Persona persona = new Persona();
-    	if (optionalPersona.isPresent()) {
-    	    
-    	    persona = optionalPersona.get();
-    	}
-		
-		reclamo.setPersona(persona);
-		}
-		
-		if (reclamoDTO.getEstadoReclamo() != null) {
-		
-		EstadoReclamo estado = EstadoReclamo.valueOf(reclamoDTO.getEstadoReclamo());
-		reclamo.setEstadoReclamo(estado);
-		}
-		
-		if (reclamoDTO.getTipoReclamo() != null) {
-		TipoReclamo tipo = TipoReclamo.valueOf(reclamoDTO.getTipoReclamo());
-		reclamo.setTipoReclamo(tipo);}
-		
-		if (reclamoDTO.getTitulo() != null) {
-		reclamo.setTitulo(reclamoDTO.getTitulo());
-		}
-		
-		
-		
-		
-		return reclamo;
-		
-	}
-	
 
 	@Override
-	public List<ReclamoDTO> findAll() {
-		
-		List<Reclamo> allReclamos = reclamoRepo.findAll();
-		List<ReclamoDTO> allReclamosDTO = new ArrayList<ReclamoDTO>();
-		for (Reclamo reclamo : allReclamos) {
-			
-			ReclamoDTO reclamoDTO = reclamoToDto(reclamo);
-			
-			allReclamosDTO.add(reclamoDTO);
-			
-			
-		} 
-		
-		return allReclamosDTO;
+	public ArrayList<Reclamo> findAll() {
+
+		return (ArrayList<Reclamo>) reclamoRepo.findAll();
 	}
 
 	@Override
-	public ReclamoDTO findById(Integer id) {
+	public Reclamo findById(Integer id) {
 
 		Optional<Reclamo> optionalReclamo = Optional.of(new Reclamo());
 		optionalReclamo = reclamoRepo.findById(id);
@@ -157,16 +41,13 @@ public Reclamo DTOtoReclamo(ReclamoDTO reclamoDTO) {
 
 			reclamo = optionalReclamo.get();
 		}
-		
-		ReclamoDTO reclamoDTO = reclamoToDto(reclamo);
 
-		return reclamoDTO;
+		return reclamo;
 	}
 
 	@Override
-	public void save(ReclamoDTO reclamoDTO) {
-		Reclamo reclamo = DTOtoReclamo(reclamoDTO);
-		
+	public void save(Reclamo reclamo) {
+
 		reclamoRepo.save(reclamo);
 
 	}
@@ -177,17 +58,13 @@ public Reclamo DTOtoReclamo(ReclamoDTO reclamoDTO) {
 
 	}
 
-	public void update(Integer id, ReclamoDTO reclamoNew) {
-		
-		
-		reclamoNew.setId_reclamo(id);
-		
-		Reclamo reclamo = DTOtoReclamo(reclamoNew);
+	public void update(Integer id, Reclamo reclamoNew) {
+		reclamoNew.setId(id);
 
-		reclamoRepo.save(reclamo);
+		reclamoRepo.save(reclamoNew);
 	}
 
-	public List<ReclamoDTO> filter(Integer userId, Integer buildingId, String state, String type) {
+	public ArrayList<Reclamo> filter(Integer userId, Integer buildingId, String state, String type) {
 
 		Reclamo reclamo = new Reclamo();
 
@@ -209,18 +86,10 @@ public Reclamo DTOtoReclamo(ReclamoDTO reclamoDTO) {
 		}
 		Example<Reclamo> example = Example.of(reclamo);
 		System.out.println(example);
-		List<Reclamo> allReclamos = (List<Reclamo>) reclamoRepo.findAll(example);
-		List<ReclamoDTO> allReclamosDTO = new ArrayList<ReclamoDTO>();
-		for (Reclamo reclamoeg : allReclamos) {
-			
-			ReclamoDTO reclamoDTO = reclamoToDto(reclamoeg);
-			
-			allReclamosDTO.add(reclamoDTO);
-			
-			
-		} 
-		
-		return allReclamosDTO;
+		ArrayList<Reclamo> allReclamos = (ArrayList<Reclamo>) reclamoRepo.findAll(example);
+
+		System.out.println(allReclamos);
+		return allReclamos;
 
 	}
 
