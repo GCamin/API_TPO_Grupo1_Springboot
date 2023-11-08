@@ -1,0 +1,18 @@
+package com.group1.dev.app.model.dao;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.group1.dev.app.model.entity.EntityUser;
+
+public interface UserRepositoryx extends JpaRepository<EntityUser, Integer> {
+
+	// Query Method
+	Optional<EntityUser> findByUsername(String username);
+
+	Optional<EntityUser> findByEmail(String email);
+
+	Optional<EntityUser> findByDni(int dni);
+
+}

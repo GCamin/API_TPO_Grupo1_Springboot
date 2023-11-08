@@ -1,6 +1,6 @@
-package com.group1.dev.app.auth;
+// package com.group1.dev.app.auth;
 
-public record LoginRequest (String username, String password) {
+// public record LoginRequest (String username, String password) {
 	
 
-}
+// }

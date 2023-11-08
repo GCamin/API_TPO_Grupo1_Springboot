@@ -15,7 +15,9 @@ public interface IUserService {
 	public void save(EntityUser user);
 
 	public void deleteById(int id);
+
+	public EntityUser findUser(String username, String password);
 	
-	public Optional<EntityUser> findByUsername(String username);
+	 public Optional<EntityUser> findByUsername(String username);
 
 }

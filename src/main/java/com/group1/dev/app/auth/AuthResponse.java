@@ -1,5 +1,5 @@
-package com.group1.dev.app.auth;
+// package com.group1.dev.app.auth;
 
-public record AuthResponse (String token) {
+// public record AuthResponse (String token) {
 
-}
+// }
