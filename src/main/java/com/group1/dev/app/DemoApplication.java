@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication(exclude={SecurityAutoConfiguration.class})
 public class DemoApplication {
 	
+
+	
 	@Bean
 	public ApplicationRunner applicationStartupRunner() {
         return new ApplicationRunner();
